@@ -8,7 +8,8 @@ public:
 	bool turnedOff = false;
 
 	wstring name = L"";
-
+	wstring f = L"OOOOOOOOOOF";
+	wstring f = L"OOOOOOOOOOF";
 	wstring comboName = L"";
 	bool comboBox = false;
 	int comboValue;
