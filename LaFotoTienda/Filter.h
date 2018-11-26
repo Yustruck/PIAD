@@ -8,16 +8,11 @@ public:
 	bool turnedOff = false;
 
 	wstring name = L"";
-	wstring ososo = L"ASD";
-
-
-	wstring f = L"OOOOOOOOOOF";
-	wstring f = L"OOOOOOOOOOF";
 	wstring comboName = L"";
 	bool comboBox = false;
 	int comboValue;
 	vector<wstring> comboBoxValues;
-
+	
 	wstring otherComboName = L"";
 	bool otherCombo = false;
 	int otherComboValue;
