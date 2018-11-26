@@ -8,6 +8,8 @@ public:
 	bool turnedOff = false;
 
 	wstring name = L"";
+	wstring ososo = L"ASD";
+
 
 	wstring comboName = L"";
 	bool comboBox = false;
