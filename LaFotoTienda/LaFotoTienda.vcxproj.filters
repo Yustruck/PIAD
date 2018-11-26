@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Rework">
+      <UniqueIdentifier>{3091d076-67ee-43e6-9932-bc6c668d027b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Filters">
+      <UniqueIdentifier>{2436d7a2-62e0-45e0-8e2e-0848bf99ef46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\old">
+      <UniqueIdentifier>{12e47b11-38a3-4abc-841b-8a8acaf332ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{08b3ea32-dcb9-45f9-b510-49c0418e3587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\eh">
+      <UniqueIdentifier>{b56b53f9-0d46-42b4-8737-871000f808a0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Filter.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="filtros.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Locales.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Puntuales.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="group.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="home.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matToBMP.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="webcam.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="r_webcam.h">
+      <Filter>Header Files\Rework</Filter>
+    </ClInclude>
+    <ClInclude Include="LaFotoTienda.h">
+      <Filter>Header Files\eh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files\eh</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files\eh</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files\eh</Filter>
+    </ClInclude>
+    <ClInclude Include="useFilters.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Globales.h">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="r_files.h">
+      <Filter>Header Files\Rework</Filter>
+    </ClInclude>
+    <ClInclude Include="BMPToFile.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="r_group.h">
+      <Filter>Header Files\Rework</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaFotoTienda.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LaFotoTienda.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="LaFotoTienda.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="home.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="file.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="group.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="webcam.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
