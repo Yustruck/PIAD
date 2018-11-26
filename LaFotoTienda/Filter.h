@@ -11,6 +11,8 @@ public:
 	wstring ososo = L"ASD";
 
 
+	wstring f = L"OOOOOOOOOOF";
+	wstring f = L"OOOOOOOOOOF";
 	wstring comboName = L"";
 	bool comboBox = false;
 	int comboValue;
