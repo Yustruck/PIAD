@@ -544,6 +544,9 @@ public:
 	Gaussiano();
 	~Gaussiano();
 
+	float sigma = 0.5;
+	float matSize = 3;
+
 	void getFilteredImg(Mat frame, Mat &out);
 	void setOption(int num, int value);
 
@@ -554,26 +557,22 @@ private:
 Gaussiano::Gaussiano()
 {
 	name = L"Gaussiano";
-	setOption(0, 1);
-	/*
+	setOption(0, 0);
+	setOption(1, 0);
+	
 	comboBox = true;
-	comboName = L"Intensidad:";
+	comboName = L"Intensidad 1:";
+	comboBoxValues.push_back(L"2");
+	comboBoxValues.push_back(L"2.5");
 	comboBoxValues.push_back(L"3");
-	comboBoxValues.push_back(L"4");
-	comboBoxValues.push_back(L"5");
-	comboBoxValues.push_back(L"6");
-	comboBoxValues.push_back(L"7");
-	*/
+	
 
-	/*
+	
 	otherCombo = true;
-	otherComboName = L"Intensidad:";
-	otherComboValues.push_back(L"1");
-	otherComboValues.push_back(L"2");
+	otherComboName = L"Intensidad 2:";
 	otherComboValues.push_back(L"3");
-	otherComboValues.push_back(L"4");
 	otherComboValues.push_back(L"5");
-	*/
+	
 }
 
 Gaussiano::~Gaussiano()
@@ -583,11 +582,18 @@ Gaussiano::~Gaussiano()
 void Gaussiano::setOption(int num, int value) {
 	switch (num)
 	{
-	case 0: {
-		float aa = value;
-		matriz = makeGaussianoMat(aa);
+	case 0: 
+	{
+		sigma = (value*0.5) + 2;
+		matriz = makeGaussianoMat(sigma, matSize);
 	}
-			break;
+	break;
+	case 1:
+	{
+		matSize = (value*2.0) + 3;
+		matriz = makeGaussianoMat(sigma, matSize);
+	}
+	break;
 	default:
 		break;
 	}
@@ -597,5 +603,5 @@ void Gaussiano::getFilteredImg(Mat frame, Mat &out) {
 	if (turnedOff)
 		return;
 
-	useThisMat(frame, out, matriz, 0, matriz.cols, matriz.cols);
+	useThisMat(frame, out, matriz, 0, matSize, matSize);
 }

@@ -341,39 +341,49 @@ void filtroMediana(Mat frame, Mat &out, char matX = 0, char matY = 0) {
 }
 
 
-Mat makeGaussianoMat(float sigma = 1.0) {
-	float w[3][3];
+Mat makeGaussianoMat(float sigma = 2.0, int matSize = 3) {
 
-	//w[s][t] = (e^-(s^2+t^2))/2*Pi*Sigma
-	float e = 2.718;
-	float pi = 3.1415;
-	float smallValue = 255;
+	double *w = new double[matSize*matSize];
 
-	for (int s = 0; s < 3; s++) {
-		for (int t = 0; t < 3; t++) {
-			float value;
-			value = pow(s, 2.0f) + pow(t, 2.0f);
-			value = pow(e, -value / pow(sigma, 2.0f));
-			value = value / (2.0f*pi*sigma);
-			w[s][t] = value;
-			if (smallValue > value)
-				smallValue = value;
-		}
-	}
+	double negativeVal = floor(matSize / 2);
 
-	char aaa[9];
+	double e = 2.718;
+	double pi = 3.1415;
+	double smallValue = 255000.0f;
 
 	int i = 0;
 
-	for (int s = 0; s < 3; s++) {
-		for (int t = 0; t < 3; t++) {
-			aaa[i] = w[s][t] / smallValue;
+	for (int s = 0; s < matSize; s++) {
+		for (int t = 0; t < matSize; t++) {
+			double value;
+			value = pow(s- negativeVal, 2.0f) + pow(t- negativeVal, 2.0f);
+			value = pow(e, - value / pow(sigma, 2.0f));
+			value = value / (2.0f*pi*sigma);
+			w[i] = value;
+			if (smallValue > value)
+				smallValue = value;
+
 			i++;
 		}
 	}
 
-	Mat other(3, 3, CV_8S, aaa);
-	return other;
+	char *aaa = new char[matSize*matSize];
+
+	i = 0;
+
+	for (int s = 0; s < matSize; s++) {
+		for (int t = 0; t < matSize; t++) {
+			aaa[i] = w[i] / smallValue;
+			i++;
+		}
+	}
+
+	Mat other(matSize, matSize, CV_8S, aaa);
+	Mat ooo = other.clone();
+
+	delete[] aaa;
+	delete[] w;
+	return ooo.clone();
 }
 
 
