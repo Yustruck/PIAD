@@ -404,7 +404,7 @@ wstring s2ws(const std::string& str)
 	return converterX.from_bytes(str);
 }
 
-void histogramaMat(Mat frame, Mat &out) {
+void histogramaShit(Mat frame, Mat &out) {
 	out = frame.clone();
 
 	int channels = frame.channels();
@@ -415,7 +415,12 @@ void histogramaMat(Mat frame, Mat &out) {
 
 	int i, j, k = 0;
 	int histoSize = 0;
-	uchar *histoR, *histoG, *histoB;
+	unsigned char *histoR, *histoG, *histoB;
+	int rowsandcols = frame.rows*frame.cols;
+	histoR = new unsigned char[rowsandcols];
+	histoG = new unsigned char[rowsandcols];
+	histoB = new unsigned char[rowsandcols];
+
 	float valueR, valueG, valueB = 0;
 	//punteros para manejar a la imagen
 	uchar *p, *q;
@@ -433,35 +438,245 @@ void histogramaMat(Mat frame, Mat &out) {
 		}
 	}
 
-	heapify(histoR, histoSize, 0);
-	heapify(histoG, histoSize, 0);
-	heapify(histoB, histoSize, 0);
-	int tmp;
-	float v1, v2;
+	heapSort(histoR, rowsandcols);
+	heapSort(histoG, rowsandcols);
+	heapSort(histoB, rowsandcols);
+
+	vector<CDFHistograma> CDF_R;
+	vector<CDFHistograma> CDF_G;
+	vector<CDFHistograma> CDF_B;
+
+	//OBTIENE TODOS LOS CDF
+	for (i = 0; i < rowsandcols; i++) {
+		CDFHistograma cdfActual;
+		for (j = 0; j < CDF_R.size(); j++) {
+			if (histoR[i] == CDF_R.at(j).pixel) {
+				CDF_R.at(j).CdF++;
+				cdfActual = CDF_R.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF != 0)
+			continue;
+		
+		cdfActual.CdF = 1;
+		cdfActual.pixel = histoR[i];
+		CDF_R.push_back(cdfActual);
+	}
+
+	for (i = 0; i < rowsandcols; i++) {
+		CDFHistograma cdfActual;
+		for (j = 0; j < CDF_G.size(); j++) {
+			if (histoG[i] == CDF_G.at(j).pixel) {
+				CDF_G.at(j).CdF++;
+				cdfActual = CDF_G.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF != 0)
+			continue;
+
+		cdfActual.CdF = 1;
+		cdfActual.pixel = histoG[i];
+		CDF_G.push_back(cdfActual);
+	}
+
+	for (i = 0; i < rowsandcols; i++) {
+		CDFHistograma cdfActual;
+		for (j = 0; j < CDF_B.size(); j++) {
+			if (histoB[i] == CDF_B.at(j).pixel) {
+				CDF_B.at(j).CdF++;
+				cdfActual = CDF_B.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF != 0)
+			continue;
+
+		cdfActual.CdF = 1;
+		cdfActual.pixel = histoB[i];
+		CDF_B.push_back(cdfActual);
+	}
+
+	int minCdF_R = CDF_R.at(0).CdF;
+	int minCdF_G = CDF_G.at(0).CdF;
+	int minCdF_B = CDF_B.at(0).CdF;
+
+	for (j = 0; j < CDF_R.size(); j++) {
+		if (j == 0)
+			continue;
+		CDF_R.at(j).CdF += CDF_R.at(j-1).CdF;
+	}
+	for (j = 0; j < CDF_G.size(); j++) {
+		if (j == 0)
+			continue;
+		CDF_G.at(j).CdF += CDF_G.at(j - 1).CdF;
+	}
+	for (j = 0; j < CDF_B.size(); j++) {
+		if (j == 0)
+			continue;
+		CDF_B.at(j).CdF += CDF_B.at(j - 1).CdF;
+	}
+
+	int MaxCdF;
+	MaxCdF = rowsandcols;
+	MaxCdF -= minCdF_R;
+	for (j = 0; j < CDF_R.size(); j++) {
+		int CdF = CDF_R.at(j).CdF;
+		CdF -= minCdF_R;
+		double v = (CdF / MaxCdF)*255.0;
+		CDF_R.at(j).newPixel = (uchar)floor(v);
+	}
+
+	MaxCdF = rowsandcols;
+	MaxCdF -= minCdF_G;
+	for (j = 0; j < CDF_G.size(); j++) {
+		int CdF = CDF_G.at(j).CdF;
+		CdF -= minCdF_G;
+		double v = (CdF / MaxCdF)*255.0;
+		CDF_G.at(j).newPixel = (uchar)floor(v);
+	}
+
+	MaxCdF = rowsandcols;
+	MaxCdF -= minCdF_B;
+	for (j = 0; j < CDF_B.size(); j++) {
+		int CdF = CDF_B.at(j).CdF;
+		CdF -= minCdF_B;
+		double v = (CdF / MaxCdF)*255.0;
+		CDF_B.at(j).newPixel = (uchar)floor(v);
+	}
+
+	int tmp = 0;
+	double v1, v2, v3;
+
 	for (i = 0; i < nRows; ++i)
 	{
+		p = frame.ptr<uchar>(i);
+		q = out.ptr<uchar>(i);
+
+		for (j = 0; j < nCols; j += 3)
+		{
+			CDFHistograma cdfR;
+			CDFHistograma cdfG;
+			CDFHistograma cdfB;
+
+			for (int k = 0; k < CDF_R.size(); k++) {
+				if (p[j + 2] == CDF_R.at(k).pixel)
+					cdfR = CDF_R.at(k);
+			}
+			for (int k = 0; k < CDF_G.size(); k++) {
+				if (p[j + 1] == CDF_G.at(k).pixel)
+					cdfG = CDF_G.at(k);
+			}
+			for (int k = 0; k < CDF_B.size(); k++) {
+				if (p[j] == CDF_B.at(k).pixel)
+					cdfB = CDF_B.at(k);
+			}
+
+			q[j + 0] = cdfB.newPixel;
+			q[j + 1] = cdfG.newPixel;
+			q[j + 2] = cdfR.newPixel;
+		}
+	}
+
+	delete[] histoR;
+	delete[] histoG;
+	delete[] histoB;
+}
+
+void histogramaMat(Mat frame, Mat &out) {
+	out = frame.clone();
+
+	int channels = frame.channels();
+
+	int nRows = frame.rows;
+	//las columnas efectivas de la imagen
+	int nCols = frame.cols * channels;
+
+	int i, j, k = 0;
+	int histoSize = 0;
+	unsigned char *histoR, *histoG, *histoB;
+	int rowsandcols = frame.rows*frame.cols;
+	histoR = new unsigned char[rowsandcols];
+	histoG = new unsigned char[rowsandcols];
+	histoB = new unsigned char[rowsandcols];
+
+	float valueR, valueG, valueB = 0;
+	//punteros para manejar a la imagen
+	uchar *p, *q;
+	for (i = 0; i < nRows; ++i)
+	{
+		p = frame.ptr<uchar>(i);
+		q = out.ptr<uchar>(i);
+
+		for (j = 0; j < nCols; j += 3)
+		{
+			histoB[histoSize] = p[j];
+			histoG[histoSize] = p[j + 1];
+			histoR[histoSize] = p[j + 2];
+			histoSize++;
+		}
+	}
+
+	heapSort(histoR, rowsandcols);
+	heapSort(histoG, rowsandcols);
+	heapSort(histoB, rowsandcols);
+
+	int tmp = 0;
+	double v1, v2, v3;
+	for (i = 0; i < nRows; ++i)
+	{
+		q = out.ptr<uchar>(i);
 
 		for (j = 0; j < nCols; j += 3)
 		{
 			v1 = histoR[tmp] - histoR[0];
-			v2 = tmp - histoR[0];
-			valueR = v1 / v2 * 255;
+			if (histoR[tmp] > 0) {
+				histoR[tmp] = histoR[tmp];
+			}
+			if (tmp >= rowsandcols - 1) {
+				histoR[tmp] = histoR[tmp];
+			}
+			if ((tmp - histoR[0]) == 0) {
+				valueR = 0;
+			}
+			else {
+				v2 = tmp - histoR[0];
+				v3 = (v1 / v2) * 255.0;
+				valueR = v3;
+			}
 
 			v1 = histoG[tmp] - histoG[0];
-			v2 = tmp - histoG[0];
-			valueG = v1 / v2 * 255;
+			if ((tmp - histoG[0]) == 0) {
+				valueG = 0;
+			}
+			else {
+				v2 = tmp - histoG[0];
+				v3 = v1 / v2;
+				valueG = v3 * 255.0;
+			}
 
 			v1 = histoB[tmp] - histoB[0];
-			v2 = tmp - histoB[0];
-			valueB = v1 / v2 * 255;
+			if ((tmp - histoB[0]) == 0) {
+				valueB = 0;
+			}
+			else {
+				v2 = tmp - histoB[0];
+				v3 = v1 / v2;
+				valueB = v3 * 255.0;
+			}
+
 			tmp++;
 
-			q[j + 0] = (int)valueR;
+			q[j + 0] = (int)valueB;
 			q[j + 1] = (int)valueG;
-			q[j + 2] = (int)valueB;
+			q[j + 2] = (int)valueR;
 		}
 	}
 
+	delete[] histoR;
+	delete[] histoG;
+	delete[] histoB;
 }
 
 void histogramaEqSimple(Mat frame, Mat &out) {
@@ -475,7 +690,12 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 
 	int i, j, k = 0;
 	int histoSize = 0;
-	uchar *histoR, *histoG, *histoB;
+	unsigned char *histoR, *histoG, *histoB;
+	int rowsandcols = frame.rows*frame.cols;
+	histoR = new unsigned char[rowsandcols];
+	histoG = new unsigned char[rowsandcols];
+	histoB = new unsigned char[rowsandcols];
+
 	int valueR, valueG, valueB = 0;
 	//punteros para manejar a la imagen
 	uchar *p, *q;
@@ -493,16 +713,21 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 		}
 	}
 
+	heapSort(histoR, rowsandcols);
+	heapSort(histoG, rowsandcols);
+	heapSort(histoB, rowsandcols);
+	/*
 	heapify(histoR, histoSize, 0);
 	heapify(histoG, histoSize, 0);
 	heapify(histoB, histoSize, 0);
-	int tmp;
+	*/
+	int tmp = 0;
 
-	float nkR, nkG, nkB = 1;
+	float nkR = 1, nkG = 1, nkB = 1;
 	float v1, v2, v3;
 	for (i = 0; i < nRows; ++i)
 	{
-
+		q = out.ptr<uchar>(i);
 		for (j = 0; j < nCols; j += 3)
 		{
 			v1 = histoR[histoSize] - histoR[0];
@@ -542,13 +767,34 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 		}
 	}
 
+	delete[] histoR;
+	delete[] histoG;
+	delete[] histoB;
 }
 
-void heapify(uchar arr[], int n, int i)
+// main function to do heap sort 
+void heapSort(unsigned char arr[], int n)
 {
-	uchar largest = i;
-	uchar l = 2 * i + 1;
-	uchar r = 2 * i + 2;
+	// Build heap (rearrange array) 
+	for (int i = n / 2 - 1; i >= 0; i--)
+		heapify(arr, n, i);
+
+	// One by one extract an element from heap 
+	for (int i = n - 1; i >= 0; i--)
+	{
+		// Move current root to end 
+		swap(arr[0], arr[i]);
+
+		// call max heapify on the reduced heap 
+		heapify(arr, i, 0);
+	}
+}
+
+void heapify(unsigned char arr[], int n, int i)
+{
+	int largest = i;
+	int l = 2 * i + 1;
+	int r = 2 * i + 2;
 
 	if (l < n && arr[l] > arr[largest])
 		largest = l;

@@ -29,8 +29,17 @@ void Globales::setOption(int num, int value) {
 
 }
 
+class CDFHistograma{
+
+public:
+	uchar pixel=0;
+	int CdF=0;
+	uchar newPixel=0;
+};
+
 class Histograma :
 	public FilterBase {
+
 public:
 	Histograma();
 	~Histograma();
@@ -44,7 +53,7 @@ public:
 
 Histograma::Histograma() {
 
-	name = L"Blanco y Negro";
+	name = L"Histograma";
 	setOption(0, 0);
 
 	comboBox = true;
@@ -64,9 +73,25 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 
 	switch (type)
 	{
-	case 0:
-		histogramaMat(frame, out);
+	case 0: {
+		/*
+		Mat bgr[3];
+		split(frame, bgr);
+
+		Mat bgrEqua[3];
+		for (int i = 0; i < 3; i++) {
+			equalizeHist(bgr[i], bgrEqua[i]);
+		}
+		vector<Mat> channels;
+		channels.push_back(bgrEqua[0]);
+		channels.push_back(bgrEqua[1]);
+		channels.push_back(bgrEqua[2]);
+		merge(channels, out);
+		*/
+
+		histogramaShit(frame, out);
 		break;
+	}
 	case 1:
 		histogramaEqSimple(frame, out);
 		break;

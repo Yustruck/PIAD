@@ -8,6 +8,15 @@ String eyes_cascade_name = "haarcascade_eye.xml";
 CascadeClassifier face_cascade;
 CascadeClassifier eyes_cascade;
 
+Mat rotate(Mat src, double angle)
+{
+	Mat dst;
+	Point2f pt(src.cols / 2., src.rows / 2.);
+	Mat r = getRotationMatrix2D(pt, angle, 1.0);
+	warpAffine(src, dst, r, cv::Size(src.cols, src.rows));
+	return dst;
+}
+
 Mat Caras(Mat frame, float escala)
 {
 	std::vector<cv::Rect> faces;
