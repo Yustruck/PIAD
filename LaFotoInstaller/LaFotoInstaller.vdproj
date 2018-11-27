@@ -15,13 +15,61 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_09CCD90E1F02490C99947B4D2F620D47"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2D0FE0FC89564A72A6BED6E45402F93B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_3FE50290B23E4F86945D4697133B51AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_58C2AB5FB5C948C69BD9203E526E2BE3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5F336EE734024C829F55C938B7241818"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7535633A14A6468E8D0C56285EC2A3FB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_776372B0C70D4E1C8926F9815963B8C1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_78FE782B53EE4E97929A8E1739E420D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7B51B28ECA76488A99940302F9F0536E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D48C0441936C46A9A0901E8CD391A94F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +91,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -59,6 +123,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -80,10 +160,170 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_09CCD90E1F02490C99947B4D2F620D47"
+            {
+            "SourcePath" = "8:..\\LaFotoTienda\\haarcascade_frontalface_alt.xml"
+            "TargetName" = "8:haarcascade_frontalface_alt.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3FE50290B23E4F86945D4697133B51AD"
+            {
+            "SourcePath" = "8:..\\LaFotoTienda\\haarcascade_mcs_leftear.xml"
+            "TargetName" = "8:haarcascade_mcs_leftear.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_58C2AB5FB5C948C69BD9203E526E2BE3"
+            {
+            "SourcePath" = "8:..\\LaFotoTienda\\haarcascade_mcs_rightear.xml"
+            "TargetName" = "8:haarcascade_mcs_rightear.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F336EE734024C829F55C938B7241818"
+            {
+            "SourcePath" = "8:..\\LaFotoTienda\\haarcascade_mcs_nose.xml"
+            "TargetName" = "8:haarcascade_mcs_nose.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7535633A14A6468E8D0C56285EC2A3FB"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\source\\repos\\LaFotoTienda\\LaFotoTienda\\opencv_world310.dll"
+            "TargetName" = "8:opencv_world310.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_776372B0C70D4E1C8926F9815963B8C1"
+            {
+            "SourcePath" = "8:..\\LaFotoTienda\\haarcascade_mcs_mouth.xml"
+            "TargetName" = "8:haarcascade_mcs_mouth.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_78FE782B53EE4E97929A8E1739E420D3"
+            {
+            "SourcePath" = "8:..\\x64\\Release\\opencv_ffmpeg310_64.dll"
+            "TargetName" = "8:opencv_ffmpeg310_64.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7B51B28ECA76488A99940302F9F0536E"
             {
             "SourcePath" = "8:..\\LaFotoTienda\\home.ico"
             "TargetName" = "8:home.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D48C0441936C46A9A0901E8CD391A94F"
+            {
+            "SourcePath" = "8:..\\LaFotoTienda\\haarcascade_eye.xml"
+            "TargetName" = "8:haarcascade_eye.xml"
             "Tag" = "8:"
             "Folder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
             "Condition" = "8:"
@@ -157,7 +397,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:La Foto Tienda"
         "ProductCode" = "8:{7C924E3E-8DB1-4919-87B5-AB0316AD7B2D}"
-        "PackageCode" = "8:{BF020717-B5B7-4E26-8309-3037F35C0CC9}"
+        "PackageCode" = "8:{DD99264F-6D4C-48A5-8942-8E739959ADB7}"
         "UpgradeCode" = "8:{975C0868-8554-4D6C-95B5-4050EF919EE0}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -168,7 +408,7 @@
         "Manufacturer" = "8:Jeffsmov int."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:La Foto Installer"
+        "Title" = "8:La Foto Tienda Installer"
         "Subject" = "8:"
         "ARPCONTACT" = "8:LMAD_Projects"
         "Keywords" = "8:"
@@ -287,6 +527,20 @@
             "Transitive" = "11:FALSE"
             "Target" = "8:_2D0FE0FC89564A72A6BED6E45402F93B"
             "Folder" = "8:_9FB3CEBCFCFE491DA69A9B10A188770A"
+            "WorkingFolder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
+            "Icon" = "8:_7B51B28ECA76488A99940302F9F0536E"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D78ABD2187984F9AA667D91BDEA62B37"
+            {
+            "Name" = "8:La Foto Tienda"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_2D0FE0FC89564A72A6BED6E45402F93B"
+            "Folder" = "8:_48B57CDC20514836A49D2870402D11D2"
             "WorkingFolder" = "8:_0B4C870F68E04E0D9F0F5F1915EAFB53"
             "Icon" = "8:_7B51B28ECA76488A99940302F9F0536E"
             "Feature" = "8:"

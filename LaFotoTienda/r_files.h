@@ -279,7 +279,7 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			ofn.hwndOwner = hWnd;
 
 			ofn.lpstrFilter = 
-				L"image file (*.bmp, *.jpg, *.png)\0*.bmp;*.png;*.jpg;*.jpeg\0video file (*.mp4, *.avi)\0*.mp4;*.avi\0";
+				L"Imagenes (*.bmp, *.jpg)\0*.bmp;*.jpg;*.jpeg\Videos (*.mp4, *.avi)\0*.mp4;*.avi\0";
 
 			ofn.nMaxFile = MAX_PATH;
 
@@ -290,18 +290,26 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 				fileName = ofn.lpstrFileTitle;
 
-				if (filext.compare(L".bmp")==0 || filext.compare(L".png") == 0 || filext.compare(L".jpg") == 0 || filext.compare(L".jpeg") == 0) {
+				filext = PathFindExtension(ofn.lpstrFileTitle);
+
+				if (filext.compare(L".bmp")==0 || filext.compare(L".jpg") == 0 || filext.compare(L".jpeg") == 0) {
 					imgFile = true;
 					ShowWindow(GetDlgItem(hWnd, IDC_PAUSEVIDEO), SW_HIDE);
 					ShowWindow(GetDlgItem(hWnd, IDC_RESUMEVIDEO), SW_HIDE);
 					ShowWindow(GetDlgItem(hWnd, IDC_RESETVIDEO), SW_HIDE);
 				}
 				else {
-					imgFile = false;
-					ShowWindow(GetDlgItem(hWnd, IDC_PAUSEVIDEO), SW_SHOW);
-					ShowWindow(GetDlgItem(hWnd, IDC_RESUMEVIDEO), SW_SHOW);
-					ShowWindow(GetDlgItem(hWnd, IDC_RESETVIDEO), SW_SHOW);
-					playVideo = true;
+					if (filext.compare(L".mp4") == 0 || filext.compare(L".avi") == 0) {
+						imgFile = false;
+						ShowWindow(GetDlgItem(hWnd, IDC_PAUSEVIDEO), SW_SHOW);
+						ShowWindow(GetDlgItem(hWnd, IDC_RESUMEVIDEO), SW_SHOW);
+						ShowWindow(GetDlgItem(hWnd, IDC_RESETVIDEO), SW_SHOW);
+						playVideo = true;
+					}
+					else {
+						MessageBox(hWnd, L"El archivo seleccionado no valido ", L"Error", MB_ICONERROR | MB_OK);
+						break;
+					}
 				}
 
 				GetWindowRect(hWnd, &rect);
@@ -312,6 +320,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 				string aFileName = ws2s(fileName);
 
 				cv::String theFileName(aFileName);
+
+				KillTimer(hWnd, ID_TIMER);
 
 				if (imgFile) {
 					frame = imread(theFileName);
@@ -348,9 +358,6 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 					MoveWindow(pictureCntr, 0, xH, frame.cols, frame.rows, true);
 
 					double fpsCam = camara.get(CAP_PROP_FPS);
-
-					KillTimer(hWnd, ID_TIMER);
-
 					double fps = 1000.0 / fpsCam;
 
 					SetTimer(hWnd, ID_TIMER, fps, (TIMERPROC)NULL);
