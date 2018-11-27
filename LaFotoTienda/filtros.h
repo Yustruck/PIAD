@@ -13,7 +13,7 @@ void toGray(Mat frame, Mat &out) {
 	int nRows = frame.rows;
 	//las columnas efectivas de la imagen
 	int nCols = frame.cols * channels;
-
+	
 	int i, j, k = 0;
 	//punteros para manejar a la imagen
 	uchar *p, *q;
@@ -21,7 +21,7 @@ void toGray(Mat frame, Mat &out) {
 	{
 		p = frame.ptr<uchar>(i);
 		q = out.ptr<uchar>(i);
-
+		
 		for (j = 0; j < nCols; j += 3)
 		{
 			uchar value = (p[j] + p[j + 1] + p[j + 2]) / 3;
@@ -257,6 +257,7 @@ void useThisMat(Mat frame, Mat &out, Mat mat, char matSum = 0, char matX = 0, ch
 }
 
 
+
 void filtroMediana(Mat frame, Mat &out, char matX = 0, char matY = 0) {
 	out = frame.clone();
 
@@ -402,4 +403,160 @@ wstring s2ws(const std::string& str)
 	std::wstring_convert<convert_typeX, wchar_t> converterX;
 
 	return converterX.from_bytes(str);
+}
+
+void histogramaMat(Mat frame, Mat &out) {
+	out = frame.clone();
+
+	int channels = frame.channels();
+
+	int nRows = frame.rows;
+	//las columnas efectivas de la imagen
+	int nCols = frame.cols * channels;
+
+	int i, j, k = 0;
+	int histoSize = 0;
+	uchar *histoR, *histoG, *histoB;
+	float valueR, valueG, valueB = 0;
+	//punteros para manejar a la imagen
+	uchar *p, *q;
+	for (i = 0; i < nRows; ++i)
+	{
+		p = frame.ptr<uchar>(i);
+		q = out.ptr<uchar>(i);
+
+		for (j = 0; j < nCols; j += 3)
+		{
+			histoB[histoSize] = p[j];
+			histoG[histoSize] = p[j + 1];
+			histoR[histoSize] = p[j + 2];
+			histoSize++;
+		}
+	}
+	heapify(histoR, histoSize, 0);
+	heapify(histoG, histoSize, 0);
+	heapify(histoB, histoSize, 0);
+	int tmp;
+	for (i = 0; i < nRows; ++i)
+	{
+
+		for (j = 0; j < nCols; j += 3)
+		{
+			float v1 = histoR[tmp] - histoR[0];
+			float v2 = tmp - histoR[0];
+			valueR = v1 / v2 * 255;
+
+			float v1 = histoG[tmp] - histoG[0];
+			float v2 = tmp - histoG[0];
+			valueG = v1 / v2 * 255;
+
+			float v1 = histoB[tmp] - histoB[0];
+			float v2 = tmp - histoB[0];
+			valueB = v1 / v2 * 255;
+			tmp++;
+
+			q[j + 0] = (int)valueR;
+			q[j + 1] = (int)valueG;
+			q[j + 2] = (int)valueB;
+		}
+	}
+
+}
+
+void histogramaEqSimple(Mat frame, Mat &out) {
+	out = frame.clone();
+
+	int channels = frame.channels();
+
+	int nRows = frame.rows;
+	//las columnas efectivas de la imagen
+	int nCols = frame.cols * channels;
+
+	int i, j, k = 0;
+	int histoSize = 0;
+	uchar *histoR, *histoG, *histoB;
+	int valueR, valueG, valueB = 0;
+	//punteros para manejar a la imagen
+	uchar *p, *q;
+	for (i = 0; i < nRows; ++i)
+	{
+		p = frame.ptr<uchar>(i);
+		q = out.ptr<uchar>(i);
+
+		for (j = 0; j < nCols; j += 3)
+		{
+			histoB[histoSize] = p[j];
+			histoG[histoSize] = p[j + 1];
+			histoR[histoSize] = p[j + 2];
+			histoSize++;
+		}
+	}
+	heapify(histoR, histoSize, 0);
+	heapify(histoG, histoSize, 0);
+	heapify(histoB, histoSize, 0);
+	int tmp;
+
+	float nkR, nkG, nkB = 1;
+	for (i = 0; i < nRows; ++i)
+	{
+
+		for (j = 0; j < nCols; j += 3)
+		{
+			float v1 = histoR[histoSize] - histoR[0];
+			for (m = 0; m < histoSize; m++) {
+				if (histoR[tmp] == histoR[tmp + 1]) {
+					nkR++;
+				}
+				float v2 = histoSize / nkR;
+				float v3 = v2 + histoR[0];
+				valueR = v1 * v3;
+			}
+
+			float v1 = histoG[histoSize] - histoG[0];
+			for (m = 0; m < histoSize; m++) {
+				if (histoG[tmp] == histoG[tmp + 1]) {
+					nkG++;
+				}
+				float v2 = histoSize / nkG;
+				float v3 = v2 + histoG[0];
+				valueG = v1 * v3;
+			}
+
+			float v1 = histoB[histoSize] - histoB[0];
+			for (m = 0; m < histoSize; m++) {
+				if (histoB[tmp] == histoB[tmp + 1]) {
+					nkB++;
+				}
+				float v2 = histoSize / nkB;
+				float v3 = v2 + histoB[0];
+				valueB = v1 * v3;
+			}
+			tmp++;
+
+			q[j + 0] = valueR;
+			q[j + 1] = valueG;
+			q[j + 2] = valueB;
+		}
+	}
+
+}
+
+void heapify(int arr[], int n, int i)
+{
+	int largest = i;
+	int l = 2 * i + 1;
+	int r = 2 * i + 2;
+
+	if (l < n && arr[l] > arr[largest])
+		largest = l;
+
+	if (r < n && arr[r] > arr[largest])
+		largest = r;
+
+	if (largest != i)
+	{
+		swap(arr[i], arr[largest]);
+
+		heapify(arr, n, largest);
+	}
 }
