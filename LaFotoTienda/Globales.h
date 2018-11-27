@@ -93,7 +93,7 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 		break;
 	}
 	case 1: {
-
+		/*
 		Mat bgr[3];
 		split(frame, bgr);
 
@@ -107,10 +107,10 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 		channels.push_back(bgrEqua[2]);
 		merge(channels, out);
 		break;
-		/*
+		*/
 		histogramaEqSimple(frame, out);
 		break;
-		*/
+		
 	}
 	case 2:
 		//histogramaEqExp(frame, out);
