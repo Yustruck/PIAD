@@ -463,7 +463,6 @@ void histogramaShit(Mat frame, Mat &out) {
 		cdfActual.pixel = histoR[i];
 		CDF_R.push_back(cdfActual);
 	}
-
 	for (i = 0; i < rowsandcols; i++) {
 		CDFHistograma cdfActual;
 		for (j = 0; j < CDF_G.size(); j++) {
@@ -480,7 +479,6 @@ void histogramaShit(Mat frame, Mat &out) {
 		cdfActual.pixel = histoG[i];
 		CDF_G.push_back(cdfActual);
 	}
-
 	for (i = 0; i < rowsandcols; i++) {
 		CDFHistograma cdfActual;
 		for (j = 0; j < CDF_B.size(); j++) {
@@ -524,7 +522,7 @@ void histogramaShit(Mat frame, Mat &out) {
 	for (j = 0; j < CDF_R.size(); j++) {
 		int CdF = CDF_R.at(j).CdF;
 		CdF -= minCdF_R;
-		double v = (CdF / MaxCdF)*255.0;
+		double v = ((double)CdF / (double)MaxCdF)*255.0;
 		CDF_R.at(j).newPixel = (uchar)floor(v);
 	}
 
@@ -533,7 +531,7 @@ void histogramaShit(Mat frame, Mat &out) {
 	for (j = 0; j < CDF_G.size(); j++) {
 		int CdF = CDF_G.at(j).CdF;
 		CdF -= minCdF_G;
-		double v = (CdF / MaxCdF)*255.0;
+		double v = ((double)CdF / (double)MaxCdF)*255.0;
 		CDF_G.at(j).newPixel = (uchar)floor(v);
 	}
 
@@ -542,7 +540,7 @@ void histogramaShit(Mat frame, Mat &out) {
 	for (j = 0; j < CDF_B.size(); j++) {
 		int CdF = CDF_B.at(j).CdF;
 		CdF -= minCdF_B;
-		double v = (CdF / MaxCdF)*255.0;
+		double v = ((double)CdF / (double)MaxCdF)*255.0;
 		CDF_B.at(j).newPixel = (uchar)floor(v);
 	}
 
