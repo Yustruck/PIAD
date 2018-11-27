@@ -60,6 +60,7 @@ Histograma::Histograma() {
 	comboName = L"Tipo:";
 	comboBoxValues.push_back(L"Histograma normal");
 	comboBoxValues.push_back(L"Ecualizacion Simple");
+	comboBoxValues.push_back(L"Ecualizacion Uniforme");
 	comboBoxValues.push_back(L"Ecualizacion Exponencial");
 }
 
@@ -108,12 +109,15 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 		merge(channels, out);
 		break;
 		*/
-		histogramaEqSimple(frame, out);
+		histogramaSimpleShit(frame, out);
 		break;
 		
 	}
 	case 2:
-		//histogramaEqExp(frame, out);
+		histogramaUniformeShit(frame, out);
+		break;
+	case 3:
+		histogramaExponencialShit(frame, out);
 		break;
 	default:
 		break;

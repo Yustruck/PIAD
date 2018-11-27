@@ -456,31 +456,13 @@ void histogramaShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
-		
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoR[i];
-		CDF_R.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
-		for (j = 0; j < CDF_G.size(); j++) {
-			if (histoG[i] == CDF_G.at(j).pixel) {
-				CDF_G.at(j).CdF++;
-				cdfActual = CDF_G.at(j);
-				break;
-			}
-		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoG[i];
-		CDF_G.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoR[i];
+			CDF_R.push_back(cdfActual);
+		}
+		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_B.size(); j++) {
 			if (histoB[i] == CDF_B.at(j).pixel) {
 				CDF_B.at(j).CdF++;
@@ -488,12 +470,26 @@ void histogramaShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoB[i];
+			CDF_B.push_back(cdfActual);
+		}
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoB[i];
-		CDF_B.push_back(cdfActual);
+		cdfActual.CdF = 0;
+		for (j = 0; j < CDF_G.size(); j++) {
+			if (histoG[i] == CDF_G.at(j).pixel) {
+				CDF_G.at(j).CdF++;
+				cdfActual = CDF_G.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF == 0)
+		{
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoG[i];
+			CDF_G.push_back(cdfActual);
+		}
 	}
 
 	int minCdF_R = CDF_R.at(0).CdF;
@@ -634,31 +630,13 @@ void histogramaSimpleShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoR[i];
-		CDF_R.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
-		for (j = 0; j < CDF_G.size(); j++) {
-			if (histoG[i] == CDF_G.at(j).pixel) {
-				CDF_G.at(j).CdF++;
-				cdfActual = CDF_G.at(j);
-				break;
-			}
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoR[i];
+			CDF_R.push_back(cdfActual);
 		}
-		if (cdfActual.CdF != 0)
-			continue;
-
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoG[i];
-		CDF_G.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
+		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_B.size(); j++) {
 			if (histoB[i] == CDF_B.at(j).pixel) {
 				CDF_B.at(j).CdF++;
@@ -666,12 +644,26 @@ void histogramaSimpleShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoB[i];
+			CDF_B.push_back(cdfActual);
+		}
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoB[i];
-		CDF_B.push_back(cdfActual);
+		cdfActual.CdF = 0;
+		for (j = 0; j < CDF_G.size(); j++) {
+			if (histoG[i] == CDF_G.at(j).pixel) {
+				CDF_G.at(j).CdF++;
+				cdfActual = CDF_G.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF == 0)
+		{
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoG[i];
+			CDF_G.push_back(cdfActual);
+		}
 	}
 
 	int minCdF_R = CDF_R.at(0).CdF;
@@ -815,31 +807,13 @@ void histogramaUniformeShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoR[i];
-		CDF_R.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
-		for (j = 0; j < CDF_G.size(); j++) {
-			if (histoG[i] == CDF_G.at(j).pixel) {
-				CDF_G.at(j).CdF++;
-				cdfActual = CDF_G.at(j);
-				break;
-			}
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoR[i];
+			CDF_R.push_back(cdfActual);
 		}
-		if (cdfActual.CdF != 0)
-			continue;
-
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoG[i];
-		CDF_G.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
+		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_B.size(); j++) {
 			if (histoB[i] == CDF_B.at(j).pixel) {
 				CDF_B.at(j).CdF++;
@@ -847,12 +821,26 @@ void histogramaUniformeShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoB[i];
+			CDF_B.push_back(cdfActual);
+		}
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoB[i];
-		CDF_B.push_back(cdfActual);
+		cdfActual.CdF = 0;
+		for (j = 0; j < CDF_G.size(); j++) {
+			if (histoG[i] == CDF_G.at(j).pixel) {
+				CDF_G.at(j).CdF++;
+				cdfActual = CDF_G.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF == 0)
+		{
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoG[i];
+			CDF_G.push_back(cdfActual);
+		}
 	}
 
 	int minCdF_R = CDF_R.at(0).CdF;
@@ -997,31 +985,13 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoR[i];
-		CDF_R.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
-		for (j = 0; j < CDF_G.size(); j++) {
-			if (histoG[i] == CDF_G.at(j).pixel) {
-				CDF_G.at(j).CdF++;
-				cdfActual = CDF_G.at(j);
-				break;
-			}
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoR[i];
+			CDF_R.push_back(cdfActual);
 		}
-		if (cdfActual.CdF != 0)
-			continue;
-
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoG[i];
-		CDF_G.push_back(cdfActual);
-	}
-	for (i = 0; i < rowsandcols; i++) {
-		CDFHistograma cdfActual;
+		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_B.size(); j++) {
 			if (histoB[i] == CDF_B.at(j).pixel) {
 				CDF_B.at(j).CdF++;
@@ -1029,12 +999,26 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 				break;
 			}
 		}
-		if (cdfActual.CdF != 0)
-			continue;
+		if (cdfActual.CdF == 0) {
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoB[i];
+			CDF_B.push_back(cdfActual);
+		}
 
-		cdfActual.CdF = 1;
-		cdfActual.pixel = histoB[i];
-		CDF_B.push_back(cdfActual);
+		cdfActual.CdF = 0;
+		for (j = 0; j < CDF_G.size(); j++) {
+			if (histoG[i] == CDF_G.at(j).pixel) {
+				CDF_G.at(j).CdF++;
+				cdfActual = CDF_G.at(j);
+				break;
+			}
+		}
+		if (cdfActual.CdF == 0)
+		{
+			cdfActual.CdF = 1;
+			cdfActual.pixel = histoG[i];
+			CDF_G.push_back(cdfActual);
+		}
 	}
 
 	int minCdF_R = CDF_R.at(0).CdF;
@@ -1070,6 +1054,7 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 
 	MaxCdF = rowsandcols;
 	MaxCdF -= minCdF_G;
+	Pr = 0;
 	for (j = 0; j < CDF_G.size(); j++) {
 		int CdF = CDF_G.at(j).CdF;
 		Pr += (double)CdF / (double)rowsandcols;
@@ -1079,6 +1064,7 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 
 	MaxCdF = rowsandcols;
 	MaxCdF -= minCdF_B;
+	Pr = 0;
 	for (j = 0; j < CDF_B.size(); j++) {
 		int CdF = CDF_B.at(j).CdF;
 		Pr += (double)CdF / (double)rowsandcols;
@@ -1116,100 +1102,6 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 			q[j + 0] = cdfB.newPixel;
 			q[j + 1] = cdfG.newPixel;
 			q[j + 2] = cdfR.newPixel;
-		}
-	}
-
-	delete[] histoR;
-	delete[] histoG;
-	delete[] histoB;
-}
-
-
-void histogramaEqSimple(Mat frame, Mat &out) {
-	out = frame.clone();
-
-	int channels = frame.channels();
-
-	int nRows = frame.rows;
-	//las columnas efectivas de la imagen
-	int nCols = frame.cols * channels;
-
-	int i, j, k = 0;
-	int histoSize = 0;
-	unsigned char *histoR, *histoG, *histoB;
-	int rowsandcols = frame.rows*frame.cols;
-	histoR = new unsigned char[rowsandcols];
-	histoG = new unsigned char[rowsandcols];
-	histoB = new unsigned char[rowsandcols];
-
-	int valueR, valueG, valueB = 0;
-	//punteros para manejar a la imagen
-	uchar *p, *q;
-	for (i = 0; i < nRows; ++i)
-	{
-		p = frame.ptr<uchar>(i);
-		q = out.ptr<uchar>(i);
-
-		for (j = 0; j < nCols; j += 3)
-		{
-			histoB[histoSize] = p[j];
-			histoG[histoSize] = p[j + 1];
-			histoR[histoSize] = p[j + 2];
-			histoSize++;
-		}
-	}
-
-	heapSort(histoR, rowsandcols);
-	heapSort(histoG, rowsandcols);
-	heapSort(histoB, rowsandcols);
-	/*
-	heapify(histoR, histoSize, 0);
-	heapify(histoG, histoSize, 0);
-	heapify(histoB, histoSize, 0);
-	*/
-	int tmp = 0;
-
-	float nkR = 1, nkG = 1, nkB = 1;
-	float v1, v2, v3;
-	for (i = 0; i < nRows; ++i)
-	{
-		q = out.ptr<uchar>(i);
-		for (j = 0; j < nCols; j += 3)
-		{
-			v1 = histoR[histoSize] - histoR[0];
-			for (int m = 0; m < histoSize; m++) {
-				if (histoR[tmp] == histoR[tmp + 1]) {
-					nkR++;
-				}
-				v2 = histoSize / nkR;
-				v3 = v2 + histoR[0];
-				valueR = v1 * v3;
-			}
-
-			v1 = histoG[histoSize] - histoG[0];
-			for (int m = 0; m < histoSize; m++) {
-				if (histoG[tmp] == histoG[tmp + 1]) {
-					nkG++;
-				}
-				v2 = histoSize / nkG;
-				v3 = v2 + histoG[0];
-				valueG = v1 * v3;
-			}
-
-			v1 = histoB[histoSize] - histoB[0];
-			for (int m = 0; m < histoSize; m++) {
-				if (histoB[tmp] == histoB[tmp + 1]) {
-					nkB++;
-				}
-				v2 = histoSize / nkB;
-				v3 = v2 + histoB[0];
-				valueB = v1 * v3;
-			}
-			tmp++;
-
-			q[j + 0] = valueR;
-			q[j + 1] = valueG;
-			q[j + 2] = valueB;
 		}
 	}
 
