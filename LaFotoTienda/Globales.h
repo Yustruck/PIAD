@@ -35,6 +35,7 @@ public:
 	uchar pixel=0;
 	int CdF=0;
 	uchar newPixel=0;
+	double Pr = 0;
 };
 
 class Histograma :
