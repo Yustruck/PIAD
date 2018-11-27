@@ -5,11 +5,12 @@ Mat noAlteredImg;
 
 bool imgFile;
 
-OPENFILENAME ofn;
-wchar_t szFileName[MAX_PATH] = L"";
-wchar_t szFileTitle[MAX_PATH] = L"";
-wchar_t szFileExt[MAX_PATH] = L"";
+bool playVideo = true;
+
+int famInVideo;
+
 wstring fileName = L"";
+wstring filext =L"";
 
 void setImage(HWND hWnd, int h) {
 	if (oriImg.empty())
@@ -22,7 +23,7 @@ void setImage(HWND hWnd, int h) {
 
 	HWND pictureCntr = GetDlgItem(hWnd, IDC_TEST_PC);
 
-	int xH = (h - frame.rows) / 2;
+	int xH = (h - frame.rows) / 3;
 
 	MoveWindow(pictureCntr, 0, xH, frame.cols, frame.rows, true);
 
@@ -56,18 +57,12 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		//Set Dialog Icon
 		HICON hicon = (HICON)LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_LAFOTOTIENDA));
 		SendMessageW(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hicon);
+		SendMessageW(hWnd, WM_SETTEXT, 0, (LPARAM)L"Archivos");
 
 		lista = GetDlgItem(hWnd, IDC_FILTROLISTA);
 		combo = GetDlgItem(hWnd, IDC_COMBOFILTROS);
 		comboStatic = GetDlgItem(hWnd, IDC_OP1);
 		listaStatic = GetDlgItem(hWnd, IDC_OP2);
-
-		ZeroMemory(&(ofn), sizeof(ofn));
-		ofn.lStructSize = sizeof(ofn);
-		ofn.lpstrFile = szFileName; //
-		ofn.lpstrFileTitle = szFileTitle;
-		ofn.nMaxFileTitle = MAX_PATH;
-		ofn.hwndOwner = hWnd;
 
 		updateList(lista);
 
@@ -79,6 +74,7 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		ShowWindow(GetDlgItem(hWnd, IDC_SAVE), SW_SHOW);
 		ShowWindow(GetDlgItem(hWnd, IDC_LOAD), SW_SHOW);
 		EnableWindow(GetDlgItem(hWnd, IDC_SAVE), false);
+
 
 		Mat emp;
 		oriImg = emp.clone();
@@ -102,22 +98,34 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		{
 		case ID_TIMER:
 		{
-			/*
-			bool exito = camara.read(frame); // lee un frame
-			if (!exito) //si no se pudo lastima de nuevo
-			{
-				cout << "no pude leer!" << endl;
+			if (imgFile)
 				break;
+
+			if (playVideo) {
+				int fam = camara.get(CAP_PROP_POS_FRAMES);
+				if (fam >= famInVideo) {
+					camara.set(CAP_PROP_POS_AVI_RATIO, 0.0);
+				}
+				camara >> frame;
+				if (frame.empty()) {
+					camara.set(CAP_PROP_POS_AVI_RATIO, 0.0);
+				}
+				if (frame.rows > 480 || frame.cols > 640) {
+					resize(frame, frame, cv::Size(640, 480), 0, 0, INTER_CUBIC);
+				}
+				oriImg = frame.clone();
 			}
+			else {
+				frame = oriImg.clone();
+			}
+			
 
 			if (!turnOffAllFilters)
 				frame = getListFilterImg(frame);
-
-			//Show final image shit
 			HBITMAP hicon = ConvertCVMatToBMP(frame);
 			SendDlgItemMessage(hWnd, IDC_TEST_PC, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hicon);
-			*/
-		}
+
+			}
 		break;
 
 		}
@@ -142,7 +150,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			else {
 				SendDlgItemMessage(hWnd, IDC_TURNFILTERS, WM_SETTEXT, 0, (LPARAM)L"Apagar filtros");
 			}
-			setImage(hWnd, h);
+			if(imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -150,7 +159,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		{
 			int elItem = SendMessage(lista, LB_GETCURSEL, 0, 0);
 			upwardsList(lista, elItem);
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -158,7 +168,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		{
 			int elItem = SendMessage(lista, LB_GETCURSEL, 0, 0);
 			downwardsList(lista, elItem);
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -169,7 +180,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			elItem = filtros.size() - 1;
 			editFiltro(lista, elItem);
 			SendMessage(lista, LB_SETCURSEL, elItem, 0);
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -182,7 +194,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 				editFiltro(lista, elItem);
 				SendMessage(lista, LB_SETCURSEL, elItem, 0);
 			}
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -209,7 +222,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		case IDC_VISIBLE:
 		{
 			changeTurnedOff();
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -217,7 +231,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		{
 			int elItem = SendDlgItemMessage(hWnd, IDC_FILTROCOMBO, CB_GETCURSEL, 0, 0);
 			selectedFiltro->setOption(0, elItem);
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
 		}
 		break;
 
@@ -225,13 +240,46 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		{
 			int elItem = SendDlgItemMessage(hWnd, IDC_FILTROOTRO, CB_GETCURSEL, 0, 0);
 			selectedFiltro->setOption(1, elItem);
-			setImage(hWnd, h);
+			if (imgFile)
+				setImage(hWnd, h);
+		}
+		break;
+
+		case IDC_RESUMEVIDEO:
+		{
+			playVideo = true;
+		}
+		break;
+
+		case IDC_PAUSEVIDEO:
+		{
+			playVideo = false;
+		}
+		break;
+
+		case IDC_RESETVIDEO:
+		{
+			camara.set(CAP_PROP_POS_AVI_RATIO, 0.0);
+			playVideo = true;
 		}
 		break;
 
 		case IDC_LOAD:
 		{
-			ofn.lpstrFilter = L"image file (*.bmp)\0*.bmp\0video file (*.mpg4)\0.mpg4";
+
+			OPENFILENAME ofn;
+			wchar_t szFileName[MAX_PATH] = L"";
+			wchar_t szFileTitle[MAX_PATH] = L"";
+			wchar_t szFileExt[MAX_PATH] = L"";
+			ZeroMemory(&(ofn), sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.lpstrFile = szFileName;
+			ofn.lpstrFileTitle = szFileTitle;
+			ofn.nMaxFileTitle = MAX_PATH;
+			ofn.hwndOwner = hWnd;
+
+			ofn.lpstrFilter = 
+				L"image file (*.bmp, *.jpg, *.png)\0*.bmp;*.png;*.jpg;*.jpeg\0video file (*.mp4, *.avi)\0*.mp4;*.avi\0";
 
 			ofn.nMaxFile = MAX_PATH;
 
@@ -242,14 +290,18 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 				fileName = ofn.lpstrFileTitle;
 
-				wstring filext = PathFindExtension(fileName.c_str());
-
-				if (filext.compare(L".bmp")==0) {
+				if (filext.compare(L".bmp")==0 || filext.compare(L".png") == 0 || filext.compare(L".jpg") == 0 || filext.compare(L".jpeg") == 0) {
 					imgFile = true;
+					ShowWindow(GetDlgItem(hWnd, IDC_PAUSEVIDEO), SW_HIDE);
+					ShowWindow(GetDlgItem(hWnd, IDC_RESUMEVIDEO), SW_HIDE);
+					ShowWindow(GetDlgItem(hWnd, IDC_RESETVIDEO), SW_HIDE);
 				}
 				else {
 					imgFile = false;
-					SetTimer(hWnd, ID_TIMER, 1000 / 24, (TIMERPROC)NULL);
+					ShowWindow(GetDlgItem(hWnd, IDC_PAUSEVIDEO), SW_SHOW);
+					ShowWindow(GetDlgItem(hWnd, IDC_RESUMEVIDEO), SW_SHOW);
+					ShowWindow(GetDlgItem(hWnd, IDC_RESETVIDEO), SW_SHOW);
+					playVideo = true;
 				}
 
 				GetWindowRect(hWnd, &rect);
@@ -278,23 +330,30 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 					oriImg = frame.clone();
 				}
 				else {
-					//VideoCapture camara(theFileName);
-					//camara.open(theFileName, CAP_ANY);
-					camara.open(theFileName, CAP_ANY);
-					//camara.open()
-
+					cv::String oaoo = aFileName;
+					camara.open(oaoo);					
+					
 					if (!camara.isOpened()) {
 						cout << "Error opening video stream or file" << endl;
+						MessageBox(hWnd, L"Un error se a cometido al cargar su video", L"Error", MB_ICONERROR | MB_OK);
 						return -1;
 					}
-
+					famInVideo = camara.get(CAP_PROP_FRAME_COUNT);
 					camara >> frame;
-
 					if (frame.rows > 480 || frame.cols > 640) {
 						resize(frame, frame, cv::Size(640, 480), 0, 0, INTER_CUBIC);
 					}
+					HWND pictureCntr = GetDlgItem(hWnd, IDC_TEST_PC);
+					int xH = (h - frame.rows) / 3;
+					MoveWindow(pictureCntr, 0, xH, frame.cols, frame.rows, true);
 
-					oriImg = frame.clone();
+					double fpsCam = camara.get(CAP_PROP_FPS);
+
+					KillTimer(hWnd, ID_TIMER);
+
+					double fps = 1000.0 / fpsCam;
+
+					SetTimer(hWnd, ID_TIMER, fps, (TIMERPROC)NULL);
 				}
 
 
@@ -305,6 +364,7 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 				SendMessage(lista, LB_RESETCONTENT, 0, 0);
 				cleanEditedFiltro(hWnd);
 
+				//EnableWindow(GetDlgItem(hWnd, IDC_SAVENAME), true);
 				EnableWindow(GetDlgItem(hWnd, IDC_SAVE), true);
 			}
 		}
@@ -312,26 +372,111 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 		case IDC_SAVE:
 		{
-			frame = getListFilterImg(oriImg);
-			HBITMAP hicon = ConvertCVMatToBMP(frame);
+			OPENFILENAME ofn;
+			wchar_t szFileName[MAX_PATH] = L"";
+			wchar_t szFileTitle[MAX_PATH] = L"";
+			wchar_t szFileExt[MAX_PATH] = L"";
+			ZeroMemory(&(ofn), sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.lpstrFile = szFileName;
+			ofn.lpstrFileTitle = szFileTitle;
+			ofn.nMaxFileTitle = MAX_PATH;
+			ofn.hwndOwner = hWnd;
 
-			GdiplusStartupInput gdiplusStartupInput;
-			ULONG_PTR gdiplusToken;
-			GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+			ofn.nMaxFile = MAX_PATH;
+			ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST;
 
-			HBITMAP hBitmap = hicon;
-			Bitmap *image = new Bitmap(hBitmap, NULL);
+			if (imgFile) {
+				ofn.lpstrFilter =
+					L"Image file (*.bmp)\0*.bmp\0";
+				ofn.lpstrDefExt = (LPCWSTR)L"bmp";
 
-			CLSID myClsId;
-			int retVal = GetEncoderClsid(L"image/bmp", &myClsId);
+				if (GetSaveFileName(&ofn)) {
 
-			wstring output = L"";
-			output = L"output - " + fileName + L".bmp";
+					if (!turnOffAllFilters)
+						frame = getListFilterImg(oriImg);
+					else
+						frame = oriImg.clone();
 
-			image->Save(output.c_str(), &myClsId);
-			delete image;
+					HBITMAP hicon = ConvertCVMatToBMP(frame);
 
-			GdiplusShutdown(gdiplusToken);
+					GdiplusStartupInput gdiplusStartupInput;
+					ULONG_PTR gdiplusToken;
+					GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+					HBITMAP hBitmap = hicon;
+					Bitmap *image = new Bitmap(hBitmap, NULL);
+
+					CLSID myClsId;
+					int retVal = GetEncoderClsid(L"image/bmp", &myClsId);
+
+					/*
+					wstring output = L"";
+					WCHAR ooo[MAX_PATH];
+					SendDlgItemMessage(hWnd, IDC_SAVENAME, WM_GETTEXT, MAX_PATH, (WPARAM)&ooo);
+					output = ooo;
+					output = output + L".bmp";
+					*/
+					wstring output = L"";
+					output = ofn.lpstrFile;
+					String nameOut = ws2s(output);
+
+					image->Save(output.c_str(), &myClsId);
+					delete image;
+
+					output = L"Archivo se ha salvado exitosamente";
+					MessageBox(hWnd, output.c_str(), L"Salvado", MB_OK);
+
+					GdiplusShutdown(gdiplusToken);
+				}
+			}
+			else {
+
+				ofn.lpstrFilter =
+					L"video file (*.avi)\0*.avi\0";
+				ofn.lpstrDefExt = (LPCWSTR)L"avi";
+
+				ofn.nMaxFile = MAX_PATH;
+
+				ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST;
+
+				if (GetSaveFileName(&ofn)) {
+					VideoWriter outputVideo;
+					int ex = static_cast<int>(camara.get(CV_CAP_PROP_FOURCC));
+					cv::Size S = cv::Size((int)camara.get(CV_CAP_PROP_FRAME_WIDTH), (int)camara.get(CV_CAP_PROP_FRAME_HEIGHT));
+
+					wstring output = L"";
+					output = ofn.lpstrFile;
+					String nameOut = ws2s(output);
+
+					outputVideo.open(nameOut, 0, camara.get(CV_CAP_PROP_FPS), S, true);
+					if (!outputVideo.isOpened())
+					{
+						cout << "Could not open the output video for write: " << nameOut << endl;
+						return -1;
+					}
+
+					Mat src;
+
+					camara.set(CAP_PROP_POS_AVI_RATIO, 0.0);
+					while (true)
+					{
+						camara >> src;
+						if (src.empty()) break;
+
+						if (!turnOffAllFilters)
+							src = getListFilterImg(src);
+
+						outputVideo.write(src.clone());
+					}
+
+					cout << "Finished writing" << endl;
+					outputVideo.release();
+
+					output = L"Archivo se ha salvado exitosamente";
+					MessageBox(hWnd, output.c_str(), L"Salvado", MB_OK);
+				}
+			}
 		}
 		break;
 		case IDC_HOME:

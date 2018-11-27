@@ -8,33 +8,23 @@ String eyes_cascade_name = "haarcascade_eye.xml";
 CascadeClassifier face_cascade;
 CascadeClassifier eyes_cascade;
 
-Mat CaraYOjos(Mat frame, float escala)
+Mat Caras(Mat frame, float escala)
 {
-	//arreglo de rectangulos de caras detectadas
 	std::vector<cv::Rect> faces;
-
-	//nuevo frame se utilizara para la conversion a gris
 	Mat frame_gray;
-
-	//creamos una matriz de pixeles menor segun la escala
-	//para procesar mas rapido
 	Mat nuevo(cvRound(frame.rows / escala), cvRound(frame.cols / escala), CV_8UC1);
-	//aqui convertimos a escala de gris
+
 	cvtColor(frame, frame_gray, CV_BGR2GRAY);
-	//aqui generamos un cuadro menor de tamaño con filtro lineal
+
 	resize(frame_gray, nuevo, nuevo.size(), 0, 0, INTER_LINEAR);
-	//acentuamos los contrastes con equalizacion de historgrama
+
 	equalizeHist(nuevo, nuevo);
 
-	//este contenedor con el metodo detectMultiScale busca en la imagen y entrega un arreglo de rectangulos
-	//donde cada uno encierra una cara
 	face_cascade.detectMultiScale(nuevo, faces, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
 
-	//le damos una recorrida a cada rectangulo y aprovechamos sus datos para generar circunferencias 
-	//una para cada cara
+
 	for (int i = 0; i < faces.size(); i++)
 	{
-		//definimos el centro y compensamos con la escala
 		cv::Point center((faces[i].x + faces[i].width*0.5)*escala, (faces[i].y + faces[i].height*0.5)*escala);
 		
 		cv::Rect r = faces.at(i);
@@ -79,6 +69,7 @@ BOOL CALLBACK reGroup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		//Set Dialog Icon
 		HICON hicon = (HICON)LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_LAFOTOTIENDA));
 		SendMessageW(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hicon);
+		SendMessageW(hWnd, WM_SETTEXT, 0, (LPARAM)L"Detector de caras");
 
 		if (!face_cascade.load(face_cascade_name)) { printf("--(!)Error loading\n"); exit(0); };
 		if (!eyes_cascade.load(eyes_cascade_name)) { printf("--(!)Error loading\n"); exit(0); };
@@ -104,7 +95,7 @@ BOOL CALLBACK reGroup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 		HWND pictureCntr = GetDlgItem(hWnd, IDC_TEST_PC);
 
-		int xH = (h - frame.rows) / 2;
+		int xH = (h - frame.rows) / 3;
 
 		MoveWindow(pictureCntr, 0, xH, frame.cols, frame.rows, true);
 
@@ -129,7 +120,7 @@ BOOL CALLBACK reGroup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 			if (!frame.empty())
 			{
-				frame = CaraYOjos(frame, 1);
+				frame = Caras(frame, 1);
 			}
 			else
 			{
@@ -137,7 +128,6 @@ BOOL CALLBACK reGroup(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 				break;
 			}
 
-			//Show final image shit
 			HBITMAP hicon = ConvertCVMatToBMP(frame);
 			SendDlgItemMessage(hWnd, IDC_TEST_PC, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hicon);
 		}

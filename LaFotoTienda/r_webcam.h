@@ -22,6 +22,7 @@ BOOL CALLBACK reWebcam(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		//Set Dialog Icon
 		HICON hicon = (HICON)LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_LAFOTOTIENDA));
 		SendMessageW(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hicon);
+		SendMessageW(hWnd, WM_SETTEXT, 0, (LPARAM)L"Webcam");
 
 		camara.open(0);
 
@@ -44,7 +45,7 @@ BOOL CALLBACK reWebcam(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 		HWND pictureCntr = GetDlgItem(hWnd, IDC_TEST_PC);
 
-		int xH = (h - frame.rows) / 2;
+		int xH = (h - frame.rows) / 3;
 
 		MoveWindow(pictureCntr, 0, xH, frame.cols, frame.rows, true);
 

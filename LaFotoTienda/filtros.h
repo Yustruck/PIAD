@@ -52,7 +52,7 @@ void toGray1(Mat frame, Mat &out) {
 
 		for (j = 0; j < nCols; j += 3)
 		{
-			int value = p[j + 2] * 0.2126f + p[j + 1] * 0.7512f + p[j] * 0.0722;
+			int value = p[j + 2] * 0.2126f + p[j + 1] * 0.7512f + p[j] * 0.0722f;
 
 			if (value > 255)
 				value = 255;
