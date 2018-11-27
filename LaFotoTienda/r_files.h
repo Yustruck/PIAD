@@ -230,7 +230,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		case IDC_FILTROCOMBO:
 		{
 			int elItem = SendDlgItemMessage(hWnd, IDC_FILTROCOMBO, CB_GETCURSEL, 0, 0);
-			selectedFiltro->setOption(0, elItem);
+			if(selectedFiltro)
+				selectedFiltro->setOption(0, elItem);
 			if (imgFile)
 				setImage(hWnd, h);
 		}
@@ -239,7 +240,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		case IDC_FILTROOTRO:
 		{
 			int elItem = SendDlgItemMessage(hWnd, IDC_FILTROOTRO, CB_GETCURSEL, 0, 0);
-			selectedFiltro->setOption(1, elItem);
+			if(selectedFiltro)
+				selectedFiltro->setOption(1, elItem);
 			if (imgFile)
 				setImage(hWnd, h);
 		}

@@ -92,9 +92,26 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 		histogramaShit(frame, out);
 		break;
 	}
-	case 1:
+	case 1: {
+
+		Mat bgr[3];
+		split(frame, bgr);
+
+		Mat bgrEqua[3];
+		for (int i = 0; i < 3; i++) {
+			equalizeHist(bgr[i], bgrEqua[i]);
+		}
+		vector<Mat> channels;
+		channels.push_back(bgrEqua[0]);
+		channels.push_back(bgrEqua[1]);
+		channels.push_back(bgrEqua[2]);
+		merge(channels, out);
+		break;
+		/*
 		histogramaEqSimple(frame, out);
 		break;
+		*/
+	}
 	case 2:
 		//histogramaEqExp(frame, out);
 		break;
