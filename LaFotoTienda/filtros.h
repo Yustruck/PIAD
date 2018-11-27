@@ -432,10 +432,12 @@ void histogramaMat(Mat frame, Mat &out) {
 			histoSize++;
 		}
 	}
+
 	heapify(histoR, histoSize, 0);
 	heapify(histoG, histoSize, 0);
 	heapify(histoB, histoSize, 0);
 	int tmp;
+
 	for (i = 0; i < nRows; ++i)
 	{
 
@@ -490,6 +492,7 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 			histoSize++;
 		}
 	}
+
 	heapify(histoR, histoSize, 0);
 	heapify(histoG, histoSize, 0);
 	heapify(histoB, histoSize, 0);
@@ -542,9 +545,9 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 
 void heapify(uchar arr[], int n, int i)
 {
-	int largest = i;
-	int l = 2 * i + 1;
-	int r = 2 * i + 2;
+	uchar largest = i;
+	uchar l = 2 * i + 1;
+	uchar r = 2 * i + 2;
 
 	if (l < n && arr[l] > arr[largest])
 		largest = l;

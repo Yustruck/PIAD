@@ -279,7 +279,7 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			ofn.hwndOwner = hWnd;
 
 			ofn.lpstrFilter = 
-				L"Imagenes (*.bmp, *.jpg)\0*.bmp;*.jpg;*.jpeg\Videos (*.mp4, *.avi)\0*.mp4;*.avi\0";
+				L"Imagenes (*.bmp, *.jpg)\0*.bmp;*.jpg;*.jpeg\0Videos (*.mp4, *.avi)\0*.mp4;*.avi\0";
 
 			ofn.nMaxFile = MAX_PATH;
 
