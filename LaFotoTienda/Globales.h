@@ -31,7 +31,7 @@ void Globales::setOption(int num, int value) {
 
 class Histograma :
 	public FilterBase {
-
+public:
 	Histograma();
 	~Histograma();
 
@@ -81,13 +81,13 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 void Histograma::setOption(int num, int value) {
 	switch (num)
 	{
-	case 0:
-	{
-		type = value;
-		comboValue = value;
-		break;
-	default:
-		break;
-		
+		case 0:
+		{
+			type = value;
+			comboValue = value;
+			break;
+		}
+		default:
+			break;
 	}
 }

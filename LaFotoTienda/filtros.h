@@ -436,21 +436,22 @@ void histogramaMat(Mat frame, Mat &out) {
 	heapify(histoG, histoSize, 0);
 	heapify(histoB, histoSize, 0);
 	int tmp;
+	float v1, v2;
 	for (i = 0; i < nRows; ++i)
 	{
 
 		for (j = 0; j < nCols; j += 3)
 		{
-			float v1 = histoR[tmp] - histoR[0];
-			float v2 = tmp - histoR[0];
+			v1 = histoR[tmp] - histoR[0];
+			v2 = tmp - histoR[0];
 			valueR = v1 / v2 * 255;
 
-			float v1 = histoG[tmp] - histoG[0];
-			float v2 = tmp - histoG[0];
+			v1 = histoG[tmp] - histoG[0];
+			v2 = tmp - histoG[0];
 			valueG = v1 / v2 * 255;
 
-			float v1 = histoB[tmp] - histoB[0];
-			float v2 = tmp - histoB[0];
+			v1 = histoB[tmp] - histoB[0];
+			v2 = tmp - histoB[0];
 			valueB = v1 / v2 * 255;
 			tmp++;
 
@@ -496,38 +497,39 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 	int tmp;
 
 	float nkR, nkG, nkB = 1;
+	float v1, v2, v3;
 	for (i = 0; i < nRows; ++i)
 	{
 
 		for (j = 0; j < nCols; j += 3)
 		{
-			float v1 = histoR[histoSize] - histoR[0];
+			v1 = histoR[histoSize] - histoR[0];
 			for (int m = 0; m < histoSize; m++) {
 				if (histoR[tmp] == histoR[tmp + 1]) {
 					nkR++;
 				}
-				float v2 = histoSize / nkR;
-				float v3 = v2 + histoR[0];
+				v2 = histoSize / nkR;
+				v3 = v2 + histoR[0];
 				valueR = v1 * v3;
 			}
 
-			float v1 = histoG[histoSize] - histoG[0];
+			v1 = histoG[histoSize] - histoG[0];
 			for (int m = 0; m < histoSize; m++) {
 				if (histoG[tmp] == histoG[tmp + 1]) {
 					nkG++;
 				}
-				float v2 = histoSize / nkG;
-				float v3 = v2 + histoG[0];
+				v2 = histoSize / nkG;
+				v3 = v2 + histoG[0];
 				valueG = v1 * v3;
 			}
 
-			float v1 = histoB[histoSize] - histoB[0];
+			v1 = histoB[histoSize] - histoB[0];
 			for (int m = 0; m < histoSize; m++) {
 				if (histoB[tmp] == histoB[tmp + 1]) {
 					nkB++;
 				}
-				float v2 = histoSize / nkB;
-				float v3 = v2 + histoB[0];
+				v2 = histoSize / nkB;
+				v3 = v2 + histoB[0];
 				valueB = v1 * v3;
 			}
 			tmp++;
