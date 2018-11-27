@@ -93,6 +93,7 @@ void addComboBox(HWND &combo) {
 	SendMessage(combo, CB_ADDSTRING, 0, (LPARAM)L"Mediana");
 	SendMessage(combo, CB_ADDSTRING, 0, (LPARAM)L"Media Ponderada");
 	SendMessage(combo, CB_ADDSTRING, 0, (LPARAM)L"Gaussiano");
+	SendMessage(combo, CB_ADDSTRING, 0, (LPARAM)L"Histograma");
 
 	SendMessage(combo, CB_SETCURSEL, 0, 0);
 }
@@ -146,6 +147,12 @@ void addFiltro(HWND &lista, int id) {
 		case 8:
 		{
 			boo = new Gaussiano();
+		}
+		break;
+
+		case 9:
+		{
+			boo = new Histograma();
 		}
 		break;
 
