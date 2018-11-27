@@ -35,18 +35,23 @@ class Histograma :
 	Histograma();
 	~Histograma();
 
+	int type = 0;
+
 	void getFilteredImg(Mat frame, Mat &out);
 	void setOption(int num, int value);
 
-private:
-	Mat matriz;
 };
 
 Histograma::Histograma() {
 
-	name = L"Histograma";
+	name = L"Blanco y Negro";
 	setOption(0, 0);
 
+	comboBox = true;
+	comboName = L"Tipo:";
+	comboBoxValues.push_back(L"Histograma normal");
+	comboBoxValues.push_back(L"Ecualizacion Simple");
+	comboBoxValues.push_back(L"Ecualizacion Exponencial");
 }
 
 Histograma::~Histograma() {
@@ -57,7 +62,20 @@ void Histograma::getFilteredImg(Mat frame, Mat &out) {
 	if (turnedOff)
 		return;
 
-	useThisMat(frame, out, matriz, 0, 3, 3);
+	switch (type)
+	{
+	case 0:
+		histogramaMat(frame, out);
+		break;
+	case 1:
+		histogramaEqSimple(frame, out);
+		break;
+	case 2:
+		//histogramaEqExp(frame, out);
+		break;
+	default:
+		break;
+	}
 }
 
 void Histograma::setOption(int num, int value) {
@@ -65,16 +83,8 @@ void Histograma::setOption(int num, int value) {
 	{
 	case 0:
 	{
-
-			char tmpMat[9] = {
-				0, -1, 0,
-				-1, 5, -1,
-				0, -1, 0
-			};
-
-			Mat other(3, 3, CV_8S, tmpMat);
-			matriz = other.clone();
-		}
+		type = value;
+		comboValue = value;
 		break;
 	default:
 		break;

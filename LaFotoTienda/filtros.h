@@ -32,7 +32,6 @@ void toGray(Mat frame, Mat &out) {
 	}
 }
 
-
 void toGray1(Mat frame, Mat &out) {
 	out = frame.clone();
 
@@ -503,7 +502,7 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 		for (j = 0; j < nCols; j += 3)
 		{
 			float v1 = histoR[histoSize] - histoR[0];
-			for (m = 0; m < histoSize; m++) {
+			for (int m = 0; m < histoSize; m++) {
 				if (histoR[tmp] == histoR[tmp + 1]) {
 					nkR++;
 				}
@@ -513,7 +512,7 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 			}
 
 			float v1 = histoG[histoSize] - histoG[0];
-			for (m = 0; m < histoSize; m++) {
+			for (int m = 0; m < histoSize; m++) {
 				if (histoG[tmp] == histoG[tmp + 1]) {
 					nkG++;
 				}
@@ -523,7 +522,7 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 			}
 
 			float v1 = histoB[histoSize] - histoB[0];
-			for (m = 0; m < histoSize; m++) {
+			for (int m = 0; m < histoSize; m++) {
 				if (histoB[tmp] == histoB[tmp + 1]) {
 					nkB++;
 				}
@@ -541,7 +540,7 @@ void histogramaEqSimple(Mat frame, Mat &out) {
 
 }
 
-void heapify(int arr[], int n, int i)
+void heapify(uchar arr[], int n, int i)
 {
 	int largest = i;
 	int l = 2 * i + 1;
