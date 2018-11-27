@@ -686,33 +686,30 @@ void histogramaSimpleShit(Mat frame, Mat &out) {
 		CDF_B.at(j).CdF += CDF_B.at(j - 1).CdF;
 	}
 
-	int MaxCdF;
+	double MaxCdF;
 	double Pr = 0;
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_R;
+	MaxCdF = (double)CDF_R[CDF_R.size() - 1].CdF;
 	for (j = 0; j < CDF_R.size(); j++) {
 		int CdF = CDF_R.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
+		Pr += (double)CdF / MaxCdF;
 		double v = Pr * 255.0;
 		CDF_R.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_G;
+	MaxCdF = (double)CDF_G[CDF_G.size() - 1].CdF;
 	Pr = 0;
 	for (j = 0; j < CDF_G.size(); j++) {
 		int CdF = CDF_G.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
+		Pr += (double)CdF / MaxCdF;
 		double v = Pr * 255.0;
 		CDF_G.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_B;
+	MaxCdF = (double)CDF_B[CDF_B.size() - 1].CdF;
 	Pr = 0;
 	for (j = 0; j < CDF_B.size(); j++) {
 		int CdF = CDF_B.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
+		Pr += (double)CdF / MaxCdF;
 		double v = Pr * 255.0;
 		CDF_B.at(j).newPixel = (uchar)floor(v);
 	}
