@@ -1007,7 +1007,7 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 		int CdF = CDF_R.at(j).CdF;
 		PrRj += CDF_R.at(j).Pr;
 		double lel = log(1.0 - PrRj);
-		double lell = -1 * lel;
+		double lell = -(1.0 / 0.01) * lel;
 		double v = (double)minCdF_R + lell;
 		CDF_R.at(j).newPixel = (uchar)floor(v);
 	}
@@ -1017,7 +1017,7 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 		int CdF = CDF_G.at(j).CdF;
 		PrRj += CDF_G.at(j).Pr;
 		double lel = log(1.0 - PrRj);
-		double lell = -1 * lel;
+		double lell = -(1.0 / 0.01) * lel;
 		double v = (double)minCdF_G + lell;
 		CDF_G.at(j).newPixel = (uchar)floor(v);
 	}
@@ -1028,7 +1028,7 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 		int CdF = CDF_B.at(j).CdF;
 		PrRj += CDF_B.at(j).Pr;
 		double lel = log(1.0 - PrRj);
-		double lell = -1 * lel;
+		double lell = -(1.0/0.01) * lel;
 		double v = (double)minCdF_B + lell;
 		CDF_B.at(j).newPixel = (uchar)floor(v);
 	}
