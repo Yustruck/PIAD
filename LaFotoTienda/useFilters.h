@@ -243,3 +243,28 @@ void enableAll() {
 	EnableWindow(GetDlgItem(ventanaActual, IDC_DELETEFILTRO), true);
 	EnableWindow(GetDlgItem(ventanaActual, IDC_TURNFILTERS), true);
 }
+
+void trulyDisableAll() {
+	disableAll();
+	EnableWindow(GetDlgItem(ventanaActual, IDC_PAUSEVIDEO), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_RESUMEVIDEO), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_RESETVIDEO), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_COMBOFILTROS), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_FILTROLISTA), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_FILTROCOMBO), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_FILTROOTRO), false);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_VISIBLE), false);
+
+}
+
+void trulyEnableAll() {
+	enableAll();
+	EnableWindow(GetDlgItem(ventanaActual, IDC_PAUSEVIDEO), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_RESUMEVIDEO), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_RESETVIDEO), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_COMBOFILTROS), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_FILTROLISTA), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_FILTROCOMBO), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_FILTROOTRO), true);
+	EnableWindow(GetDlgItem(ventanaActual, IDC_VISIBLE), true);
+}

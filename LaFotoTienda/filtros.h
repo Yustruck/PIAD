@@ -340,7 +340,6 @@ void filtroMediana(Mat frame, Mat &out, char matX = 0, char matY = 0) {
 
 
 Mat makeGaussianoMat(float sigma = 2.0, int matSize = 3) {
-
 	double *w = new double[matSize*matSize];
 
 	double negativeVal = floor(matSize / 2);
@@ -392,8 +391,6 @@ string ws2s(const std::wstring& wstr)
 
 	return converterX.to_bytes(wstr);
 }
-
-
 wstring s2ws(const std::string& str)
 {
 	using convert_typeX = std::codecvt_utf8<wchar_t>;
@@ -1071,7 +1068,6 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 	delete[] histoB;
 }
 
-// main function to do heap sort 
 void heapSort(unsigned char arr[], int n)
 {
 	// Build heap (rearrange array) 

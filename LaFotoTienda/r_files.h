@@ -5,12 +5,16 @@ Mat noAlteredImg;
 
 bool imgFile;
 
+bool videoIsRendering;
+
 bool playVideo = true;
 
 int famInVideo;
 
 wstring fileName = L"";
 wstring filext =L"";
+
+VideoWriter outputVideo;
 
 void setImage(HWND hWnd, int h) {
 	if (oriImg.empty())
@@ -89,6 +93,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		cleanEditedFiltro(hWnd);
 
 		disableAll();
+
+		videoIsRendering = false;
 	}
 	break;
 
@@ -126,6 +132,52 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			SendDlgItemMessage(hWnd, IDC_TEST_PC, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hicon);
 
 			}
+		break;
+
+		case ID_RENDERTIMER:
+		{
+			if (!videoIsRendering)
+				break;
+
+			Mat src;
+			camara >> src;
+			if (!src.empty()) {
+				if (!turnOffAllFilters)
+					src = getListFilterImg(src);
+
+				outputVideo.write(src.clone());
+
+				frame = src.clone();
+				if (frame.rows > 480 || frame.cols > 640) {
+					resize(frame, frame, cv::Size(640, 480), 0, 0, INTER_CUBIC);
+				}
+
+				HBITMAP hicon = ConvertCVMatToBMP(frame);
+				SendDlgItemMessage(hWnd, IDC_TEST_PC, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hicon);
+
+				break;
+			}
+			else {
+
+				videoIsRendering = false;
+
+				cout << "Finished writing" << endl;
+				outputVideo.release();
+
+				KillTimer(hWnd, ID_RENDERTIMER);
+
+				double fpsCam = camara.get(CAP_PROP_FPS);
+				double fps = 1000.0 / fpsCam;
+				SetTimer(hWnd, ID_TIMER, fps, (TIMERPROC)NULL);
+				camara.set(CAP_PROP_POS_AVI_RATIO, 0.0);
+
+				trulyEnableAll();
+
+				wstring output = L"El archivo se ha salvado exitosamente";
+				MessageBox(hWnd, output.c_str(), L"Salvado", MB_OK);
+			}
+
+		}
 		break;
 
 		}
@@ -365,8 +417,6 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 					SetTimer(hWnd, ID_TIMER, fps, (TIMERPROC)NULL);
 				}
 
-
-				setImage(hWnd, h);
 				enableAll();
 				simpleFilterIni();
 				cleanFilterList();
@@ -375,6 +425,8 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 				//EnableWindow(GetDlgItem(hWnd, IDC_SAVENAME), true);
 				EnableWindow(GetDlgItem(hWnd, IDC_SAVE), true);
+
+				setImage(hWnd, h);
 			}
 		}
 		break;
@@ -450,7 +502,6 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 				ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST;
 
 				if (GetSaveFileName(&ofn)) {
-					VideoWriter outputVideo;
 					int ex = static_cast<int>(camara.get(CV_CAP_PROP_FOURCC));
 					cv::Size S = cv::Size((int)camara.get(CV_CAP_PROP_FRAME_WIDTH), (int)camara.get(CV_CAP_PROP_FRAME_HEIGHT));
 
@@ -467,23 +518,16 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 					Mat src;
 
+					double fpsCam = camara.get(CAP_PROP_FPS);
+					double fps = 1000.0 / fpsCam;
+
+					KillTimer(hWnd, ID_TIMER);
+					SetTimer(hWnd, ID_RENDERTIMER, fps, (TIMERPROC)NULL);
+
 					camara.set(CAP_PROP_POS_AVI_RATIO, 0.0);
-					while (true)
-					{
-						camara >> src;
-						if (src.empty()) break;
 
-						if (!turnOffAllFilters)
-							src = getListFilterImg(src);
-
-						outputVideo.write(src.clone());
-					}
-
-					cout << "Finished writing" << endl;
-					outputVideo.release();
-
-					output = L"Archivo se ha salvado exitosamente";
-					MessageBox(hWnd, output.c_str(), L"Salvado", MB_OK);
+					videoIsRendering = true;
+					trulyDisableAll();
 				}
 			}
 		}
@@ -491,6 +535,10 @@ BOOL CALLBACK reFiles(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		case IDC_HOME:
 		case IDCANCEL:
 		{
+			if (videoIsRendering) {
+
+				break;
+			}
 			camara.release();
 			cleanFilterList();
 			EndDialog(hWnd, true);
