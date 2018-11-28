@@ -671,16 +671,13 @@ void histogramaSimpleShit(Mat frame, Mat &out) {
 		}
 	}
 
-	double MaxCdF;
 	double PrRj = 0;
-	MaxCdF = (double)CDF_R[CDF_R.size() - 1].CdF;
 	for (j = 0; j < CDF_R.size(); j++) {
 		PrRj += CDF_R.at(j).Pr;
 		double v = PrRj * 255.0;
 		CDF_R.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = (double)CDF_G[CDF_G.size() - 1].CdF;
 	PrRj = 0;
 	for (j = 0; j < CDF_G.size(); j++) {
 		PrRj += CDF_G.at(j).Pr;
@@ -688,7 +685,6 @@ void histogramaSimpleShit(Mat frame, Mat &out) {
 		CDF_G.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = (double)CDF_B[CDF_B.size() - 1].CdF;
 	PrRj = 0;
 	for (j = 0; j < CDF_B.size(); j++) {
 		PrRj += CDF_B.at(j).Pr;
@@ -775,6 +771,7 @@ void histogramaUniformeShit(Mat frame, Mat &out) {
 	vector<CDFHistograma> CDF_R;
 	vector<CDFHistograma> CDF_G;
 	vector<CDFHistograma> CDF_B;
+	double minPr = 1.0 / (double)rowsandcols;
 
 	//OBTIENE TODOS LOS CDF
 	for (i = 0; i < rowsandcols; i++) {
@@ -782,20 +779,23 @@ void histogramaUniformeShit(Mat frame, Mat &out) {
 		for (j = 0; j < CDF_R.size(); j++) {
 			if (histoR[i] == CDF_R.at(j).pixel) {
 				CDF_R.at(j).CdF++;
+				CDF_R.at(j).Pr += minPr;
 				cdfActual = CDF_R.at(j);
 				break;
 			}
 		}
 		if (cdfActual.CdF == 0) {
-
 			cdfActual.CdF = 1;
 			cdfActual.pixel = histoR[i];
+			cdfActual.Pr = minPr;
 			CDF_R.push_back(cdfActual);
 		}
+		//Blue
 		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_B.size(); j++) {
 			if (histoB[i] == CDF_B.at(j).pixel) {
 				CDF_B.at(j).CdF++;
+				CDF_B.at(j).Pr += minPr;
 				cdfActual = CDF_B.at(j);
 				break;
 			}
@@ -803,13 +803,15 @@ void histogramaUniformeShit(Mat frame, Mat &out) {
 		if (cdfActual.CdF == 0) {
 			cdfActual.CdF = 1;
 			cdfActual.pixel = histoB[i];
+			cdfActual.Pr = minPr;
 			CDF_B.push_back(cdfActual);
 		}
-
+		//Green
 		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_G.size(); j++) {
 			if (histoG[i] == CDF_G.at(j).pixel) {
 				CDF_G.at(j).CdF++;
+				CDF_G.at(j).Pr += minPr;
 				cdfActual = CDF_G.at(j);
 				break;
 			}
@@ -818,58 +820,32 @@ void histogramaUniformeShit(Mat frame, Mat &out) {
 		{
 			cdfActual.CdF = 1;
 			cdfActual.pixel = histoG[i];
+			cdfActual.Pr = minPr;
 			CDF_G.push_back(cdfActual);
 		}
 	}
 
-	int minCdF_R = CDF_R.at(0).CdF;
-	int minCdF_G = CDF_G.at(0).CdF;
-	int minCdF_B = CDF_B.at(0).CdF;
-
-	for (j = 0; j < CDF_R.size(); j++) {
-		if (j == 0)
-			continue;
-		CDF_R.at(j).CdF += CDF_R.at(j - 1).CdF;
-	}
-	for (j = 0; j < CDF_G.size(); j++) {
-		if (j == 0)
-			continue;
-		CDF_G.at(j).CdF += CDF_G.at(j - 1).CdF;
-	}
-	for (j = 0; j < CDF_B.size(); j++) {
-		if (j == 0)
-			continue;
-		CDF_B.at(j).CdF += CDF_B.at(j - 1).CdF;
-	}
-
-	int MaxCdF;
-	double Pr = 0;
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_R;
+	double PrRj = 0;
 	for (j = 0; j < CDF_R.size(); j++) {
 		int CdF = CDF_R.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
-		double v = (double)((histoR[rowsandcols - 1] - histoR[0]) * Pr + histoR[0]);
+		PrRj += CDF_R.at(j).Pr;
+		double v = (double)((histoR[rowsandcols - 1] - histoR[0]) * PrRj + histoR[0]);
 		CDF_R.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_G;
-	Pr = 0;
+	PrRj = 0;
 	for (j = 0; j < CDF_G.size(); j++) {
 		int CdF = CDF_G.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
-		double v = (double)((histoG[rowsandcols - 1] - histoG[0]) * Pr + histoG[0]);
+		PrRj += CDF_G.at(j).Pr;
+		double v = (double)((histoG[rowsandcols - 1] - histoG[0]) * PrRj + histoG[0]);
 		CDF_G.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_B;
-	Pr = 0;
+	PrRj = 0;
 	for (j = 0; j < CDF_B.size(); j++) {
 		int CdF = CDF_B.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
-		double v = (double)((histoB[rowsandcols - 1] - histoB[0]) * Pr + histoB[0]);
+		PrRj += CDF_B.at(j).Pr;
+		double v = (double)((histoB[rowsandcols - 1] - histoB[0]) * PrRj + histoB[0]);
 		CDF_B.at(j).newPixel = (uchar)floor(v);
 	}
 
@@ -952,28 +928,31 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 	vector<CDFHistograma> CDF_R;
 	vector<CDFHistograma> CDF_G;
 	vector<CDFHistograma> CDF_B;
+	double minPr = 1.0 / (double)rowsandcols;
 
-	//OBTIENE TODOS LOS CDF 
-	// en el mismo for puedo poner los demas fors TODO
+	//OBTIENE TODOS LOS CDF
 	for (i = 0; i < rowsandcols; i++) {
 		CDFHistograma cdfActual;
 		for (j = 0; j < CDF_R.size(); j++) {
 			if (histoR[i] == CDF_R.at(j).pixel) {
 				CDF_R.at(j).CdF++;
+				CDF_R.at(j).Pr += minPr;
 				cdfActual = CDF_R.at(j);
 				break;
 			}
 		}
 		if (cdfActual.CdF == 0) {
-
 			cdfActual.CdF = 1;
 			cdfActual.pixel = histoR[i];
+			cdfActual.Pr = minPr;
 			CDF_R.push_back(cdfActual);
 		}
+		//Blue
 		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_B.size(); j++) {
 			if (histoB[i] == CDF_B.at(j).pixel) {
 				CDF_B.at(j).CdF++;
+				CDF_B.at(j).Pr += minPr;
 				cdfActual = CDF_B.at(j);
 				break;
 			}
@@ -981,13 +960,15 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 		if (cdfActual.CdF == 0) {
 			cdfActual.CdF = 1;
 			cdfActual.pixel = histoB[i];
+			cdfActual.Pr = minPr;
 			CDF_B.push_back(cdfActual);
 		}
-
+		//Green
 		cdfActual.CdF = 0;
 		for (j = 0; j < CDF_G.size(); j++) {
 			if (histoG[i] == CDF_G.at(j).pixel) {
 				CDF_G.at(j).CdF++;
+				CDF_G.at(j).Pr += minPr;
 				cdfActual = CDF_G.at(j);
 				break;
 			}
@@ -996,6 +977,7 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 		{
 			cdfActual.CdF = 1;
 			cdfActual.pixel = histoG[i];
+			cdfActual.Pr = minPr;
 			CDF_G.push_back(cdfActual);
 		}
 	}
@@ -1020,34 +1002,34 @@ void histogramaExponencialShit(Mat frame, Mat &out) {
 		CDF_B.at(j).CdF += CDF_B.at(j - 1).CdF;
 	}
 
-	int MaxCdF;
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_R;
-	double Pr = 0;
+	double PrRj = 0;
 	for (j = 0; j < CDF_R.size(); j++) {
 		int CdF = CDF_R.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
-		double v = (double)minCdF_R - ((1 / 1) * log(1 - Pr));
+		PrRj += CDF_R.at(j).Pr;
+		double lel = log(1.0 - PrRj);
+		double lell = -1 * lel;
+		double v = (double)minCdF_R + lell;
 		CDF_R.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_G;
-	Pr = 0;
+	PrRj = 0;
 	for (j = 0; j < CDF_G.size(); j++) {
 		int CdF = CDF_G.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
-		double v = (double)minCdF_G - ((1 / 1) * log(1 - Pr));
+		PrRj += CDF_G.at(j).Pr;
+		double lel = log(1.0 - PrRj);
+		double lell = -1 * lel;
+		double v = (double)minCdF_G + lell;
 		CDF_G.at(j).newPixel = (uchar)floor(v);
 	}
 
-	MaxCdF = rowsandcols;
-	MaxCdF -= minCdF_B;
-	Pr = 0;
+
+	PrRj = 0;
 	for (j = 0; j < CDF_B.size(); j++) {
 		int CdF = CDF_B.at(j).CdF;
-		Pr += (double)CdF / (double)rowsandcols;
-		double v = (double)minCdF_B - ((1 / 1) * log(1 - Pr));
+		PrRj += CDF_B.at(j).Pr;
+		double lel = log(1.0 - PrRj);
+		double lell = -1 * lel;
+		double v = (double)minCdF_B + lell;
 		CDF_B.at(j).newPixel = (uchar)floor(v);
 	}
 
