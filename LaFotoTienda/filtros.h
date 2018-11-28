@@ -256,7 +256,6 @@ void useThisMat(Mat frame, Mat &out, Mat mat, char matSum = 0, char matX = 0, ch
 }
 
 
-
 void filtroMediana(Mat frame, Mat &out, char matX = 0, char matY = 0) {
 	out = frame.clone();
 
@@ -297,21 +296,20 @@ void filtroMediana(Mat frame, Mat &out, char matX = 0, char matY = 0) {
 				for (k = 0; k < 3; k++) {
 					int val = 0;
 
-					vector<uchar> losJajas;
-
-					//Este metodo es extremadamento lento, mejorar luego
+					unsigned char *deVerdad = new unsigned char[matY*matX];
+					int deDeveras = 0;
 
 					for (int we = 0; we < matY; we++)
 						for (int oof = 0; oof < matX; oof++) {
-							losJajas.push_back(p[we][j + k + (-3 * matXHalf) + (3 * oof)]);
+							deVerdad[deDeveras] = p[we][j + k + (-3 * matXHalf) + (3 * oof)];
+							deDeveras++;
 						}
 
-					std::sort(losJajas.begin(), losJajas.end(), myobject);
+					heapSort(deVerdad, matY*matX);
 
-					//val = val / matSum;
+					val = deVerdad[(int)((matX*matY) / 2)-1];
 
-					val = losJajas[((matX*matY)/2)-1];
-					
+					delete[] deVerdad;
 
 					if (val > 255)
 						value[k] = 255;
