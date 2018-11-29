@@ -4,7 +4,7 @@ HOGDescriptor hog; //Histograma de Gradientes Orientados
 Mat aux;
 Mat aux2;
 
-float escala = 2;
+float escala = 1.0f;
 
 class faceRememberer
 {
@@ -149,52 +149,82 @@ Mat Caras(Mat frame, float escala)
 }
 
 Mat CuerpoCompleto(Mat frame) {
-	//modificamos el tamaño
 	resize(frame, aux, aux.size(), 0, 0, INTER_LINEAR);
-	//convertimos de color a gris
 	cvtColor(aux, aux2, CV_BGR2GRAY);
-	//si no hay imagen adios!
 	if (!frame.data)
 		return frame;
-	//generamos un arreglo de rectangulo para encuadrar a la racita
+
 	vector<cv::Rect> found, found_filtered;
-	//le agregamos estilo para medir el tiempo de proceso, importante esta tecnica para
-	//medir el desempeño
-	double t = (double)getTickCount();
-	//le pedimos que haga el trabajo de detectar
+
 	hog.detectMultiScale(aux2, found, 0, cv::Size(8, 8), cv::Size(32, 32), 1.05, 2);
-	//contador de los ciclos para la cantidad de hallazgos
+
 	size_t i, j;
-	//comienza el ciclo
+
 	for (i = 0; i < found.size(); i++)
 	{
-		//genera al primer rectangulo de los hallados
 		cv::Rect r = found[i];
-		//checa si no se repiten lso rectangulos
+
 		for (j = 0; j < found.size(); j++)
 			if (j != i && (r & found[j]) == r)
 				break;
-		//si se acabo el arreglo lo mete al final del otro arreglo
-		//este solo tendra rectangulos no repetidos
+
 		if (j == found.size())
 			found_filtered.push_back(r);
 	}
-	//de los hallados, a dibujar
+	/*
+	for (int jF = 0; jF < remFaces.size(); jF++) {
+		remFaces[jF]->wasThisFaceReFound = false;
+	}
+	vector<int> thingNotfound;
+	*/
+
 	for (i = 0; i < found_filtered.size(); i++)
 	{
-		//dibuja el primero de los filtrados
+		/*
+		faceRememberer *caraActual = NULL;
+		for (int jF = 0; jF < remFaces.size(); jF++) {
+			if (remFaces[jF]->isThisCloneEnough(found_filtered[i].x, found_filtered[i].y)) {
+				caraActual = remFaces[jF];
+			}
+		}
+
+		if (!caraActual) {
+			caraActual = new faceRememberer(found_filtered[i].x, found_filtered[i].y, rand() % 254, rand() % 254, rand() % 254);
+			remFaces.push_back(caraActual);
+		}
+		*/
+
+
 		cv::Rect r = found_filtered[i];
-		//dibujemos el rectangulo un poco mas grande de lo normal
-		//pa que la racita no quede mal encuadrada, el 3 es de la
-		//reduccion que habiamos hecho, estamos compensando
+
 		r.x *= escala;
 		r.x += cvRound(r.width*0.1);
 		r.width = cvRound(r.width*0.8*escala);
 		r.y = r.y*escala;
 		r.y += cvRound(r.height*0.07);
 		r.height = cvRound(r.height*0.8*escala);
-		rectangle(frame, r.tl(), r.br(), cv::Scalar(0, 255, 0), 3);
+		rectangle(frame, r.tl(), r.br(), cv::Scalar(255, 0, 0), 3);
+		//rectangle(frame, r.tl(), r.br(), caraActual->color, 3);
 	}
+
+	/*
+	for (int jF = 0; jF < remFaces.size(); jF++) {
+		if (!remFaces[jF]->wasThisFaceReFound) {
+			thingNotfound.push_back(jF);
+		}
+	}
+
+	for (int jF = 0; jF < thingNotfound.size(); jF++) {
+		removeThisRem1(thingNotfound[jF]);
+	}
+
+	for (int jF = thingNotfound.size() - 1; jF >= 0; jF--) {
+		removeThisRem2(thingNotfound[jF]);
+	}
+
+	thingNotfound.clear();
+	*/
+	
 
 	wstring caras = L"";
 
